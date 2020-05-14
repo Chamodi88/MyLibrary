@@ -2,9 +2,10 @@ const express = require('express')
 const router = express.Router()
 const Author = require('../models/author')
 const Book = require('../models/book')
+const {ensureAuthenticated} = require('../config/auth')
 
 // All authors route
-router.get('/', async(req,res) => {
+router.get('/', ensureAuthenticated, async(req,res) => {
     let searchOptions = {}
     if (req.query.name != null && req.query.name !== '') {
         searchOptions.name = new RegExp(req.query.name, 'i')
@@ -21,8 +22,8 @@ router.get('/', async(req,res) => {
 })
 
 //new author route
-router.get('/new',(req,res) => {
-    res.render('authors/new', {author: new Author()})
+router.get('/new', (req,res) => {
+        res.render('authors/new', {author: new Author()})
 })
 
 // create author route
@@ -55,7 +56,7 @@ router.get('/:id', async(req, res) => {
     }
 })
 
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit',  async (req, res) => {
     try {
       const author = await Author.findById(req.params.id)
       res.render('authors/edit', { author: author })

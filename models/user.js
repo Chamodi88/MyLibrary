@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const ROLE = { ADMIN: 'admin', BASIC: 'basic' }
 
 const UserSchema = new mongoose.Schema({
   name: {
@@ -16,6 +17,10 @@ const UserSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  role: {
+    type: String,
+    default: ROLE.BASIC 
   }
 });
 
