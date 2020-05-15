@@ -1,3 +1,4 @@
+<% if (!isAuthenticated) { %>
 <div class="row mt-5">
     <div class="col-md-6 m-auto">
       <div class="card card-body text-center">
@@ -8,14 +9,11 @@
       </div>
     </div>
   </div>
-
+  <% } %>
   <h2 class="page-header">Resently Added Books</h2>
-
-  <div class="book-grid" >
-    <% books.forEach(book => { %>
-      <img class="book-cover " src="<%= book.coverImagePath %>">
-      </a>
-    <% }) %>
+<div>
+  <%- include('./partials/bookGrid', { books: books, large: true}) %>
+   
   </div>
 
 

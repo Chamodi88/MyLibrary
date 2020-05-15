@@ -31,6 +31,11 @@ app.use(passport.session())
 
 app.use(flash())
 
+app.use(function(req, res, next) {
+    res.locals.isAuthenticated = req.isAuthenticated();
+    next();
+})
+
 // Global variables
 app.use((req, res,next) => {
     res.locals.success_msg = req.flash('success_msg')

@@ -1,11 +1,22 @@
 <header>
     <nav class="header-nav">
         <a class="header-title" href="/">My Library</a>
+        <% if (isAuthenticated) { %>
+        <div> 
+            <p class="lead mb-3">Welcome <%= user.name %></p>        
+        </div>
+        <% } %>
         <ul>
             <li><a href="/authors">Authors</a></li>
-            <li><a href="/authors/new">Add Author</a></li>
             <li><a href="/books">Books</a></li>
+            <% if (isAuthenticated && user.role == 'admin') { %>
+            <li><a href="/authors/new">Add Author</a></li>
             <li><a href="/books/new">Add Book</a></li>
+            <% } %>
+            <% if (isAuthenticated) { %>
+            <li><a href="/users/logout" class="btn btn-secondary">Logout</a></li>
+            <% } %>
         </ul>
     </nav>
+    
 </header>

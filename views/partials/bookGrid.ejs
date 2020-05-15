@@ -3,7 +3,9 @@
 
 <div class="book-grid <%= bookGridClass %>" >
   <% books.forEach(book => { %>
+    <% if (isAuthenticated) { %>
     <a href="/books/<%= book.id %>">
+      <% } %>
     <img class="book-cover <%= bookCoverClass %>" src="<%= book.coverImagePath %>">
     </a>
   <% }) %>

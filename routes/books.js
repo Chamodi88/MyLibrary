@@ -22,6 +22,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
       const books = await query.exec()
       res.render('books/index', {
         books: books,
+        user: req.user,
         searchOptions: req.query
       })
     } catch {
@@ -31,7 +32,7 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 
 //new book route
 router.get('/new', async(req,res) => {
-    renderNewPage(res, new Book())
+    renderNewPage(req,res, new Book())  
 })
 
 // create book route
@@ -46,16 +47,16 @@ router.post('/', async(req,res) => {
     saveCover(book, req.body.cover)
     try {
         const newBook = await book.save()
-        res.redirect('books/${newBook,id}')
+        res.redirect('books/${newBook.id}')
     } catch {
-        renderNewPage(res, book, true)
+        renderNewPage(req,res, book, true)
     }
 })
 // Show Book Route
 router.get('/:id', async (req, res) => {
   try {
     const book = await Book.findById(req.params.id).populate('author').exec()
-    res.render('books/show', { book: book })
+    res.render('books/show', { book: book, user: req.user })
   } catch {
     res.redirect('/')
   }
@@ -65,7 +66,7 @@ router.get('/:id', async (req, res) => {
 router.get('/:id/edit', async(req,res) => {
   try {
     const book = await Book.findById(req.params.id)
-    renderEditPage(res, book)
+    renderEditPage(req,res, book)
   } catch {
     res.redirect('/')
   }
@@ -90,7 +91,7 @@ router.put('/:id', async(req,res) => {
       res.redirect(`/books/${book.id}`)
   } catch {
     if ( book != null) {
-      renderEditPage(res, book, true)
+      renderEditPage(req, res, book, true)
     } else {
       redirect('/')
     }
@@ -109,6 +110,7 @@ try {
   if (book != null) {
     res.render('books/show', {
       book: book,
+      user: req.user,
       errorMessage: 'Could not remove book'
     })
   }else {
@@ -118,20 +120,21 @@ try {
 })
 
 
-async function renderNewPage(res, book, hasError = false){
-  renderFormPage(res,book,'new', hasError)
+async function renderNewPage(req, res, book, hasError = false){
+  renderFormPage(req, res,book,'new', hasError)
 } 
 
-async function renderEditPage(res, book, hasError = false){
-  renderFormPage(res,book,'edit', hasError)
+async function renderEditPage(req, res, book, hasError = false){
+  renderFormPage(req, res,book,'edit', hasError)
 } 
 
-async function renderFormPage(res, book, form, hasError = false){
+async function renderFormPage(req, res, book, form, hasError = false){
   try {
       const authors = await Author.find({})
       const params = {
           authors: authors,
-          book: book
+          book: book,
+          user: req.user
       }
       if (hasError) {
         if (form === 'edit') {

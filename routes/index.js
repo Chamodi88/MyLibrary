@@ -11,17 +11,7 @@ router.get('/', async (req,res) => {
         books =[]
         
     }
-    res.render('index', {books : books})
+    res.render('index', {books : books, user: req.user})
 })
 
-router.get('/dashboard', ensureAuthenticated, async(req, res) => {
-    let books
-    try {
-        books = await Book.find().sort({createdAt: 'desc'}).limit(10).exec()
-    } catch {
-        books =[]
-        
-    }
-    res.render('dashboard',{books : books, name: req.user.name})
-})
 module.exports = router

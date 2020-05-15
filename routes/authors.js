@@ -4,6 +4,8 @@ const Author = require('../models/author')
 const Book = require('../models/book')
 const {ensureAuthenticated} = require('../config/auth')
 
+
+
 // All authors route
 router.get('/', ensureAuthenticated, async(req,res) => {
     let searchOptions = {}
@@ -14,6 +16,7 @@ router.get('/', ensureAuthenticated, async(req,res) => {
         const authors = await Author.find(searchOptions)
         res.render('authors/index', {
             authors: authors,
+            user: req.user,
             searchOptions: req.query
         })
     } catch {
@@ -23,7 +26,7 @@ router.get('/', ensureAuthenticated, async(req,res) => {
 
 //new author route
 router.get('/new', (req,res) => {
-        res.render('authors/new', {author: new Author()})
+        res.render('authors/new', {author: new Author(), user: req.user})
 })
 
 // create author route
@@ -37,6 +40,7 @@ router.post('/', async(req,res) => {
     } catch {
         res.render('authors/new', {
             author: author,
+            user: req.user,
             errorMessage: 'Error creating Author'
             
         })
@@ -49,7 +53,8 @@ router.get('/:id', async(req, res) => {
         const books = await Book.find({ author: author.id}).limit(6).exec()
         res.render('authors/show', {
             author: author,
-            booksByAuthor: books
+            booksByAuthor: books,
+            user: req.user
         })
     } catch {
         res.redirect('/')
@@ -59,7 +64,7 @@ router.get('/:id', async(req, res) => {
 router.get('/:id/edit',  async (req, res) => {
     try {
       const author = await Author.findById(req.params.id)
-      res.render('authors/edit', { author: author })
+      res.render('authors/edit', { author: author, user: req.user })
     } catch {
       res.redirect('/authors')
     }
@@ -78,6 +83,7 @@ router.put('/:id', async (req, res) => {
         } else{
             res.render('authors/edit', {
                 author: author,
+                user: req.user,
                 errorMessage: 'Error updating Author' 
         })
     }

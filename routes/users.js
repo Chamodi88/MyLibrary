@@ -7,26 +7,26 @@ const User = require('../models/user')
 
 const ROLE = { ADMIN: 'admin', BASIC: 'basic' }
 
+
 // Login route
 router.get('/login', (req, res) => {
     res.render('login')
 })
 
 // Login handle
-router.post('/login', (req,res, next, user) => {
+router.post('/login', (req,res,next) => {
         passport.authenticate('local', {
-        successRedirect: '/dashboard',
+        successRedirect: '/',
         failureRedirect: '/users/login',
-        failureFlash: true
-    }) (req, res, next)
-    console.log(user.role)
-})
+        failureFlash: true 
+    }) (req,res,next)       
+}) 
 
 // logout handle
 router.get('/logout', (req, res) => {
     req.logout()
     req.flash('success_msg', 'You are looged out')
-    res.redirect('/users/login')
+    res.redirect('/')
 })
 
 // Register route
@@ -75,7 +75,7 @@ if (errors.length >0 ) {
                 password,
                 password2
             });
-        } if (req.body.name == 'admin') {
+        } if (req.body.email == 'admin@bookstore.com') {
                 const newUser = new User({
                     name: name,
                     email: email,
