@@ -54,3 +54,10 @@
     color: var(--color-btn-danger-text-dark);
     background-color: var(--color-btn-danger-background-dark);
 }
+
+.btn-secondary{
+    font-size: 20px;
+    border-radius: 10px;
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+}

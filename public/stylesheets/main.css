@@ -38,3 +38,14 @@ body {
 .error-message{
     color: hsl(var(--color-danger-hue), 100%, 50%);
 }
+
+.container-header{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.user-name {
+    float: left;
+    margin-left: 1.5rem;
+    margin-top: 2rem;
+}
